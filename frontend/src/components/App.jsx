@@ -21,7 +21,7 @@ class App extends React.Component {
   }
 
   render() {
-    let defaultKey = 'agendamentos'
+    let defaultKey = `${process.env.PUBLIC_URL}/agendamentos`
 
     if (window.location.pathname) {
       defaultKey = window.location.pathname.substr(1)
@@ -45,20 +45,20 @@ class App extends React.Component {
             <Menu
               mode="inline"
               defaultSelectedKeys={[defaultKey]}>
-              <Menu.Item key="agendamentos">
-                <Link to="/agendamentos">
+              <Menu.Item key={`${process.env.PUBLIC_URL}/agendamentos`}>
+                <Link to={`${process.env.PUBLIC_URL}/agendamentos`}>
                   <CalendarOutlined/>
                   <span>Meus agendamentos</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="novo-agendamento">
-                <Link to="/novo-agendamento">
+              <Menu.Item key={`${process.env.PUBLIC_URL}/novo-agendamento`}>
+                <Link to={`${process.env.PUBLIC_URL}/novo-agendamento`}>
                   <PlusCircleOutlined/>
                   <span>Novo agendamento</span>
                 </Link>
               </Menu.Item>
-              <Menu.Item key="pesquisar">
-                <Link to="/pesquisar">
+              <Menu.Item key={`${process.env.PUBLIC_URL}/pesquisar`}>
+                <Link to={`${process.env.PUBLIC_URL}/pesquisar`}>
                   <FieldTimeOutlined/>
                   <span>Pesquisar</span>
                 </Link>
@@ -75,18 +75,18 @@ class App extends React.Component {
             }}>
 
             <Switch>
-              <Route path="/agendamentos/:id" render={(props) => <Appointment {...props}/>}/>
-              <Route path="/agendamentos">
+              <Route path={`${process.env.PUBLIC_URL}/agendamentos/:id`} render={(props) => <Appointment {...props}/>}/>
+              <Route path={`${process.env.PUBLIC_URL}/agendamentos`}>
                 <MyAppointments/>
               </Route>
-              <Route path="/novo-agendamento">
+              <Route path={`${process.env.PUBLIC_URL}/novo-agendamento`}>
                 <CreateAppointment/>
               </Route>
-              <Route path="/pesquisar">
+              <Route path={`${process.env.PUBLIC_URL}/pesquisar`}>
                 <Search/>
               </Route>
-              <Route path="/">
-                <Redirect to="/agendamentos"/>
+              <Route path={`${process.env.PUBLIC_URL}/`}>
+                <Redirect to={`${process.env.PUBLIC_URL}/agendamentos`}/>
               </Route>
             </Switch>
           </Content>

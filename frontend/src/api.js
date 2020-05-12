@@ -10,7 +10,7 @@ api.interceptors.response.use((response) => {
 }, (error) => {
 
   if (error.response.status === 401) {
-    window.location.href = 'http://portal.propulsaodental.com.br/AliancaNet/html/frm_login.php'
+    window.location.href = `${process.env.PUBLIC_URL}/login` // NOTE(Pedro): Not implemented, I use a simple redirect on the final product
     return
   }
 

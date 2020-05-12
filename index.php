@@ -256,7 +256,6 @@ $app->group('/api', function (App $app) {
         return $response->withJson($appointment);
     });
 })->add(function ($request, $response, $next) {
-
     if (getUserID()) {
         return $next($request, $response);
     }

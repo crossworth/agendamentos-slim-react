@@ -110,7 +110,7 @@ class CreateAppointment extends React.Component {
         documents: files,
       }).then(result => {
         message.success('Agendamento cadastrado com sucesso')
-        this.props.history.push('/agendamentos/' + result.data.id)
+        this.props.history.push(`${process.env.PUBLIC_URL}/agendamentos/${result.data.id}`)
       })
     })
   }

@@ -79,7 +79,7 @@ export default class MyAppointments extends React.Component {
           {appointments.map(item => (
             <div key={item.id}>
               <Tag color="#2db7f5">Ag:</Tag>
-              <Link to={'/agendamentos/' + item.id}>
+              <Link to={`${process.env.PUBLIC_URL}/agendamentos/${item.id}`}>
                 <span>{item.name}</span>
               </Link>
               <br/>
@@ -90,7 +90,7 @@ export default class MyAppointments extends React.Component {
           {returns.map(item => (
             <div key={item.id}>
               <Tag color="#f50">Rt:</Tag>
-              <Link to={'/agendamentos/' + item.id}>
+              <Link to={`${process.env.PUBLIC_URL}/agendamentos/${item.id}`}>
                 <span>{item.name}</span>
               </Link>
               <br/>

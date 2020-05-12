@@ -1,5 +1,9 @@
 <?php
 
+if (session_id() == '') {
+    session_start();
+}
+
 function getUserID()
 {
     return isset($_SESSION['codigoIdentificacao']) ? $_SESSION['codigoIdentificacao'] : null;
