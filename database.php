@@ -1,7 +1,5 @@
 <?php
 
-use Ramsey\Uuid\Uuid;
-
 function getUserID()
 {
     return isset($_SESSION['codigoIdentificacao']) ? $_SESSION['codigoIdentificacao'] : null;
@@ -60,7 +58,7 @@ function saveAppointmentFile(\PDO $db, $appointmentID, $name, $path)
     $stmt->execute([
         null,
         $appointmentID,
-        Uuid::uuid4(),
+        uuid(),
         $name,
         $path
     ]);
@@ -189,4 +187,15 @@ function setupDatabase(\PDO $db)
         KEY appointment_files_appointment_id_foreign (appointment_id),
         CONSTRAINT appointment_files_appointment_id_foreign FOREIGN KEY (appointment_id) REFERENCES appointments (id) ON DELETE CASCADE
     )");
+}
+
+function uuid()
+{
+    return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+        mt_rand(0, 0xffff),
+        mt_rand(0, 0x0fff) | 0x4000,
+        mt_rand(0, 0x3fff) | 0x8000,
+        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+    );
 }
