@@ -60,12 +60,36 @@ function getAppointment(\PDO $db, $id)
     return $result;
 }
 
-function getAppointments(\PDO $db)
+function getAppointments(\PDO $db, $userID, $date, $returnDate, $dueDate)
 {
     $conditions = [];
     $parameters = [];
 
-    $query = "SELECT * FROM appointment_files";
+    if ($userID) {
+        $conditions[] = 'alianca_user_id = ?';
+        $parameters[] = $userID;
+    }
+
+    if ($date) {
+        $conditions[] = 'date = ?';
+        $parameters[] = $date;
+    }
+
+    if ($returnDate) {
+        $conditions[] = 'return_date = ?';
+        $parameters[] = $returnDate;
+    }
+
+    if ($dueDate) {
+        $conditions[] = 'due_date = ?';
+        $parameters[] = $dueDate;
+    }
+
+    $query = "SELECT * FROM appointments";
+
+    if ($conditions) {
+        $query .= " WHERE " . implode(" AND ", $conditions);
+    }
 
     $stmt = $db->query($query);
     $stmt->execute($parameters);
@@ -88,7 +112,7 @@ function getAppointmentFile(\PDO $db, $uuid)
 
 function getAppointmentFilesForAppointment(\PDO $db, $appointmentID)
 {
-    $stmt = $db->query("SELECT * FROM appointment_files WHERE appointment_id = ?");
+    $stmt = $db->prepare("SELECT * FROM appointment_files WHERE appointment_id = ?");
     $stmt->execute([$appointmentID]);
     return $stmt->fetchAll();
 }

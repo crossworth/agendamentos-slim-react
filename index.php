@@ -33,6 +33,16 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
+@mkdir('./api/download', 0777, true);
+
+/**
+ * Migrate if needed
+ */
+$app->add(function ($request, $response, $next) {
+    setupDatabase($this->db);
+    return $next($request, $response);
+});
+
 /**
  * Enable CORS
  */
@@ -101,8 +111,12 @@ $app->group('/api', function (App $app) {
     });
 
     $app->get('/appointments', function (Request $request, Response $response) {
-        // TODO(Pedro): handle this
-        $appointments = getAppointments($this->db);
+        $userID = getUserID();
+        $date = isset($_GET['date']) ? $_GET['date'] : null;
+        $returnDate = isset($_GET['return_date']) ? $_GET['return_date'] : null;
+        $dueDate = isset($_GET['due_date']) ? $_GET['due_date'] : null;
+
+        $appointments = getAppointments($this->db, $userID, $date, $returnDate, $dueDate);
         return $response->withJson($appointments);
     });
 
@@ -128,9 +142,77 @@ $app->group('/api', function (App $app) {
 
     $app->post('/appointments', function (Request $request, Response $response) {
         $contents = $request->getParsedBody();
+        $userID = getUserID();
+        $name = !empty($contents['name']) ? $contents['name'] : null;
+        $address = !empty($contents['address']) ? $contents['address'] : null;
+        $landlinePhoneNumber = !empty($contents['landline_phone_number']) ? $contents['landline_phone_number'] : null;
+        $mobilePhoneNumber = !empty($contents['mobile_phone_number']) ? $contents['mobile_phone_number'] : null;
+        $email = !empty($contents['email']) ? $contents['email'] : null;
+        $numberOfEmployees = !empty($contents['number_of_employees']) ? $contents['number_of_employees'] : null;
+        $date = !empty($contents['date']) ? $contents['date'] : null;
+        $returnDate = !empty($contents['return_date']) ? $contents['return_date'] : null;
+        $dueDate = !empty($contents['due_date']) ? $contents['due_date'] : null;
+        $observations = !empty($contents['observations']) ? $contents['observations'] : null;
+        $documents = !empty($contents['documents']) ? $contents['documents'] : [];
 
+        if (!$name) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar o nome'
+            ], 400);
+        }
 
-        // todo(Pedro): store the appointment
+        if (!$email) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar o email'
+            ], 400);
+        }
+
+        if (!$mobilePhoneNumber) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar o telefone móvel'
+            ], 400);
+        }
+
+        $id = saveAppointment($this->db,
+            $userID,
+            $name,
+            $address,
+            $landlinePhoneNumber,
+            $mobilePhoneNumber,
+            $email,
+            $numberOfEmployees,
+            $date,
+            $returnDate,
+            $dueDate,
+            $observations
+        );
+
+        if (!$id) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Não foi possível cadastrar o agendamento'
+            ], 500);
+        }
+
+        foreach ($documents as $file) {
+            $path = './api/download/' . time() . "_" . $file['name'];
+            file_put_contents($path, base64_decode($file['content']));
+            saveAppointmentFile($this->db, $id, $file['name'], $path);
+        }
+
+        $appointment = getAppointment($this->db, $id);
+
+        if (!$appointment) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Agendamento não encontrado'
+            ], 404);
+        }
+
+        return $response->withJson($appointment);
     });
 })->add(function ($request, $response, $next) {
     // TODO(Pedro): allow only auth users
