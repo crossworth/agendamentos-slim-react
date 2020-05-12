@@ -41,7 +41,10 @@ $container['db'] = function ($c) {
 
 $container['notFoundHandler'] = function ($c) {
     return function (Request $request, Response $response) use ($c) {
-        $newPath = './frontend/build/' . $request->getUri()->getPath();
+        $file = $request->getUri()->getPath();
+        $file = str_ireplace('../', '/', $file);
+
+        $newPath = './frontend/build/' . $file;
 
         if (file_exists($newPath)) {
             $mimes = new MimeTypes;
