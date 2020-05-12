@@ -5,6 +5,7 @@ require_once dirname(__FILE__) . '/database.php';
 
 use Slim\App;
 use Slim\Http\Stream;
+use Mimey\MimeTypes;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -18,7 +19,6 @@ $config = [
         'dbname' => 'agenda-slim',
     ]
 ];
-
 
 function getBaseURL()
 {
@@ -37,6 +37,25 @@ $container['db'] = function ($c) {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     return $pdo;
+};
+
+$container['notFoundHandler'] = function ($c) {
+    return function (Request $request, Response $response) use ($c) {
+        $newPath = './frontend/build/' . $request->getUri()->getPath();
+
+        if (file_exists($newPath)) {
+            $mimes = new MimeTypes;
+            $ext = pathinfo($newPath, PATHINFO_EXTENSION);
+
+            return $response->withStatus(200)
+                ->withHeader('Content-Type', $mimes->getMimeType($ext))
+                ->write(file_get_contents($newPath));
+        }
+
+        return $response->withStatus(200)
+            ->withHeader('Content-Type', 'text/html')
+            ->write(file_get_contents('./frontend/build/index.html'));
+    };
 };
 
 @mkdir('./api/download', 0777, true);
@@ -69,8 +88,14 @@ $app->add(function ($request, $response, $next) {
  * Return React app
  */
 $app->get('/', function (Request $request, Response $response) {
-
+    return $response->withStatus(200)
+        ->withHeader('Content-Type', 'text/html')
+        ->write(file_get_contents('./frontend/build/index.html'));
 });
+
+/**
+ * Poor's man implementation of a redirect
+ */
 
 /**
  * API Routes
@@ -228,8 +253,15 @@ $app->group('/api', function (App $app) {
         return $response->withJson($appointment);
     });
 })->add(function ($request, $response, $next) {
-    // TODO(Pedro): allow only auth users
-    return $next($request, $response);
+
+    if (getUserID()) {
+        return $next($request, $response);
+    }
+
+    return $response->withJson([
+        'erro' => true,
+        'message' => 'Você deve fazer login para poder ver essa página'
+    ], 401);
 });
 
 $app->run();

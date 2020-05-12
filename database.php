@@ -4,7 +4,7 @@ use Ramsey\Uuid\Uuid;
 
 function getUserID()
 {
-    return null;
+    return isset($_SESSION['codigoIdentificacao']) ? $_SESSION['codigoIdentificacao'] : null;
 }
 
 function saveAppointment(\PDO $db,
