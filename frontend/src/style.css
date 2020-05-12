@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+.side-area {
+    background: white !important;
+}
+
+.logo {
+    height: 32px;
+    font-weight: bold;
+    margin: 16px;
+    text-align: center;
+    font-family: Nunito, sans-serif;
+    font-size: 18px;
+}
+
+.ant-layout-sider-collapsed #svg_logo_complete {
+    clip-path: inset(0% 90% 0% 0%);
+    margin-left: 15px;
+}
+
+.svg_logo {
+    fill: #ed1a3b
+}
+
+.main-content {
+    background: #fff;
+    border-radius: 5px;
+}

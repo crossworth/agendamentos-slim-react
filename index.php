@@ -19,6 +19,12 @@ $config = [
     ]
 ];
 
+
+function getBaseURL()
+{
+    return 'http://agenda-slim.test';
+}
+
 $app = new App([
     'settings' => $config
 ]);

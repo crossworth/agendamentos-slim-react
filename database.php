@@ -21,6 +21,22 @@ function saveAppointment(\PDO $db,
                          $observations)
 {
     $stmt = $db->prepare("INSERT INTO appointments VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+    if ($date) {
+        $dateTime = new \DateTime($date);
+        $date = date_format($dateTime, "Y-m-d");
+    }
+
+    if ($returnDate) {
+        $dateTime = new \DateTime($returnDate);
+        $returnDate = date_format($dateTime, "Y-m-d");
+    }
+
+    if ($dueDate) {
+        $dateTime = new \DateTime($dueDate);
+        $dueDate = date_format($dateTime, "Y-m-d");
+    }
+
     $stmt->execute([
         null,
         $userID,
@@ -56,7 +72,11 @@ function getAppointment(\PDO $db, $id)
     $stmt = $db->prepare("SELECT * FROM appointments WHERE id = ? LIMIT 1");
     $stmt->execute([$id]);
     $result = $stmt->fetch();
-    $result['files'] = getAppointmentFilesForAppointment($db, $id);
+
+    if ($result) {
+        $result['files'] = getAppointmentFilesForAppointment($db, $id);
+    }
+
     return $result;
 }
 
@@ -64,6 +84,21 @@ function getAppointments(\PDO $db, $userID, $date, $returnDate, $dueDate)
 {
     $conditions = [];
     $parameters = [];
+
+    if ($date) {
+        $dateTime = new \DateTime($date);
+        $date = date_format($dateTime, "Y-m-d");
+    }
+
+    if ($returnDate) {
+        $dateTime = new \DateTime($returnDate);
+        $returnDate = date_format($dateTime, "Y-m-d");
+    }
+
+    if ($dueDate) {
+        $dateTime = new \DateTime($dueDate);
+        $dueDate = date_format($dateTime, "Y-m-d");
+    }
 
     if ($userID) {
         $conditions[] = 'alianca_user_id = ?';
@@ -91,7 +126,7 @@ function getAppointments(\PDO $db, $userID, $date, $returnDate, $dueDate)
         $query .= " WHERE " . implode(" AND ", $conditions);
     }
 
-    $stmt = $db->query($query);
+    $stmt = $db->prepare($query);
     $stmt->execute($parameters);
     $results = $stmt->fetchAll();
 
@@ -114,7 +149,14 @@ function getAppointmentFilesForAppointment(\PDO $db, $appointmentID)
 {
     $stmt = $db->prepare("SELECT * FROM appointment_files WHERE appointment_id = ?");
     $stmt->execute([$appointmentID]);
-    return $stmt->fetchAll();
+    $files = $stmt->fetchAll();
+
+    foreach ($files as &$file) {
+        $file['url'] = getBaseURL() . '/api/download/' . $file['uuid'];
+    }
+    unset($file);
+
+    return $files;
 }
 
 function setupDatabase(\PDO $db)
