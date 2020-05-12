@@ -169,6 +169,13 @@ $app->group('/api', function (App $app) {
             ], 400);
         }
 
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar um email válido'
+            ], 400);
+        }
+
         if (!$mobilePhoneNumber) {
             return $response->withJson([
                 'erro' => true,
