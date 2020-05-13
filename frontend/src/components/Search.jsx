@@ -45,7 +45,7 @@ export default class Search extends React.Component {
         title: 'Nome',
         dataIndex: 'name',
         key: 'name',
-        render: (text, data) => <a href={'/agendamentos/' + data.id}>{text}</a>
+        render: (text, data) => <a href={`${process.env.PUBLIC_URL}/agendamentos/${data.id}`}>{text}</a>
       },
       {
         title: 'Data (visita)',
