@@ -12,6 +12,7 @@ import MyAppointments from './MyAppointments'
 import CreateAppointment from './CreateAppointment'
 import Appointment from './Appointment'
 import Search from './Search'
+import UpdateAppointment from './UpdateAppointment'
 
 const { Sider, Content } = Layout
 
@@ -75,6 +76,7 @@ class App extends React.Component {
             }}>
 
             <Switch>
+              <Route path={`${process.env.PUBLIC_URL}/agendamentos/editar/:id`} render={(props) => <UpdateAppointment {...props}/>}/>
               <Route path={`${process.env.PUBLIC_URL}/agendamentos/:id`} render={(props) => <Appointment {...props}/>}/>
               <Route path={`${process.env.PUBLIC_URL}/agendamentos`}>
                 <MyAppointments/>

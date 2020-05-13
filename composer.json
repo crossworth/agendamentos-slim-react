@@ -3,6 +3,7 @@
     "slim/slim": "^3.12.3",
     "ext-json": "*",
     "ext-fileinfo": "*",
-    "ralouphie/mimey": "^2.1"
+    "ralouphie/mimey": "^2.1",
+    "ext-pdo": "*"
   }
 }

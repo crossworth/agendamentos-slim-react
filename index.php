@@ -39,25 +39,25 @@ $container['db'] = function ($c) {
     return $pdo;
 };
 
+/**
+ * Poor's man implementation of a redirect
+ */
 $container['notFoundHandler'] = function ($c) {
     return function (Request $request, Response $response) use ($c) {
-        $file = $request->getUri()->getPath();
-        $file = str_ireplace('../', '/', $file);
+        $filePath = $request->getUri()->getPath();
+        $filePath = str_ireplace('../', '/', $filePath);
+        $filePathInBuild = realpath('./frontend/build/' . $filePath);
 
-        $newPath = './frontend/build/' . $file;
-
-        if (file_exists($newPath)) {
+        if ($filePathInBuild) {
             $mimes = new MimeTypes;
-            $ext = pathinfo($newPath, PATHINFO_EXTENSION);
+            $ext = pathinfo($filePathInBuild, PATHINFO_EXTENSION);
 
             return $response->withStatus(200)
                 ->withHeader('Content-Type', $mimes->getMimeType($ext))
-                ->write(file_get_contents($newPath));
+                ->write(file_get_contents($filePathInBuild));
         }
 
-        return $response->withStatus(200)
-            ->withHeader('Content-Type', 'text/html')
-            ->write(file_get_contents('./frontend/build/index.html'));
+        return reactHome($response);
     };
 };
 
@@ -91,14 +91,8 @@ $app->add(function ($request, $response, $next) {
  * Return React app
  */
 $app->get('/', function (Request $request, Response $response) {
-    return $response->withStatus(200)
-        ->withHeader('Content-Type', 'text/html')
-        ->write(file_get_contents('./frontend/build/index.html'));
+    return reactHome($response);
 });
-
-/**
- * Poor's man implementation of a redirect
- */
 
 /**
  * API Routes
@@ -255,6 +249,92 @@ $app->group('/api', function (App $app) {
 
         return $response->withJson($appointment);
     });
+
+    $app->put('/appointments/{appointment}', function (Request $request, Response $response, $args) {
+        if (empty($args['appointment'])) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar o ID'
+            ], 400);
+        }
+
+        $appointmentID = $args['appointment'];
+
+        $contents = $request->getParsedBody();
+        $userID = getUserID();
+        $name = !empty($contents['name']) ? $contents['name'] : null;
+        $address = !empty($contents['address']) ? $contents['address'] : null;
+        $landlinePhoneNumber = !empty($contents['landline_phone_number']) ? $contents['landline_phone_number'] : null;
+        $mobilePhoneNumber = !empty($contents['mobile_phone_number']) ? $contents['mobile_phone_number'] : null;
+        $email = !empty($contents['email']) ? $contents['email'] : null;
+        $numberOfEmployees = !empty($contents['number_of_employees']) ? $contents['number_of_employees'] : null;
+        $date = !empty($contents['date']) ? $contents['date'] : null;
+        $returnDate = !empty($contents['return_date']) ? $contents['return_date'] : null;
+        $dueDate = !empty($contents['due_date']) ? $contents['due_date'] : null;
+        $observations = !empty($contents['observations']) ? $contents['observations'] : null;
+
+        if (!$name) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar o nome'
+            ], 400);
+        }
+
+        if (!$email) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar o email'
+            ], 400);
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar um email válido'
+            ], 400);
+        }
+
+        if (!$mobilePhoneNumber) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Você deve informar o telefone móvel'
+            ], 400);
+        }
+
+        $id = updateAppointment($this->db,
+            $appointmentID,
+            $userID,
+            $name,
+            $address,
+            $landlinePhoneNumber,
+            $mobilePhoneNumber,
+            $email,
+            $numberOfEmployees,
+            $date,
+            $returnDate,
+            $dueDate,
+            $observations
+        );
+
+        if (!$id) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Não foi possível atualizar o agendamento'
+            ], 500);
+        }
+
+        $appointment = getAppointment($this->db, $id);
+
+        if (!$appointment) {
+            return $response->withJson([
+                'erro' => true,
+                'message' => 'Agendamento não encontrado'
+            ], 404);
+        }
+
+        return $response->withJson($appointment);
+    });
+
 })->add(function ($request, $response, $next) {
     if (getUserID()) {
         return $next($request, $response);
@@ -267,3 +347,10 @@ $app->group('/api', function (App $app) {
 });
 
 $app->run();
+
+function reactHome($response)
+{
+    return $response->withStatus(200)
+        ->withHeader('Content-Type', 'text/html')
+        ->write(file_get_contents('./frontend/build/index.html'));
+}

@@ -19,7 +19,7 @@ const { Option } = Select
 
 const possibleDDD = [11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 31, 32, 33, 34, 35, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 49, 51, 53, 54, 55, 61, 62, 63, 64, 65, 66, 67, 68, 69, 71, 73, 74, 75, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95, 96, 97, 98, 99]
 
-const dddSelector = field => {
+export const dddSelector = field => {
   return (
     <Form.Item name={'ddd_' + field} noStyle>
       <Select style={{ width: 70 }}>
@@ -29,7 +29,7 @@ const dddSelector = field => {
   )
 }
 
-const phoneValidator = (rule, value) => {
+export const phoneValidator = (rule, value) => {
   if (!value || value.length < 8) {
     return Promise.resolve()
   }
@@ -43,7 +43,7 @@ const phoneValidator = (rule, value) => {
   return Promise.reject('Você deve informar um telefone válido')
 }
 
-const sanitizePhoneNumber = (ddd, phone) => {
+export const sanitizePhoneNumber = (ddd, phone) => {
   if (!phone) {
     return ''
   }
@@ -146,7 +146,6 @@ class CreateAppointment extends React.Component {
         name="basic"
         layout="vertical"
         initialValues={{
-          remember: true,
           ddd_landline_phone_number: 41,
           ddd_mobile_phone_number: 41,
         }}

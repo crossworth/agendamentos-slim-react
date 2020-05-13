@@ -10,7 +10,7 @@ api.interceptors.response.use((response) => {
 }, (error) => {
 
   if (error.response.status === 401) {
-    window.location.href = `${process.env.PUBLIC_URL}/login` // NOTE(Pedro): Not implemented, I use a simple redirect on the final product
+    alert('Você deve fazer login')
     return
   }
 
@@ -61,4 +61,19 @@ const searchAppointments = (date, returnDate, issueDate) => {
   })
 }
 
-export { createAppointment, getAppointment, getAppointments, searchAppointments }
+const updateAppointment = appointment => {
+  return api.put(`/appointments/${appointment.id}`, {
+    name: appointment.name,
+    address: appointment.address,
+    landline_phone_number: appointment.landline_phone_number,
+    mobile_phone_number: appointment.mobile_phone_number,
+    email: appointment.email,
+    number_of_employees: appointment.number_of_employees,
+    date: appointment.date,
+    return_date: appointment.return_date,
+    due_date: appointment.due_date,
+    observations: appointment.observations
+  })
+}
+
+export { createAppointment, updateAppointment, getAppointment, getAppointments, searchAppointments }

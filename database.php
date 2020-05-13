@@ -56,6 +56,54 @@ function saveAppointment(\PDO $db,
     return $db->lastInsertId();
 }
 
+function updateAppointment(\PDO $db,
+                           $appointmentID,
+                           $userID,
+                           $name,
+                           $address,
+                           $landlinePhoneNumber,
+                           $mobilePhoneNumber,
+                           $email,
+                           $numberOfEmployees,
+                           $date,
+                           $returnDate,
+                           $dueDate,
+                           $observations)
+{
+    $stmt = $db->prepare("UPDATE appointments SET alianca_user_id = ?, name = ?, address = ?, landline_phone_number = ?, mobile_phone_number = ?, email = ?, number_of_employees = ?, date = ?, return_date = ?, due_date = ?, observations = ? WHERE id = ?");
+
+    if ($date) {
+        $dateTime = new \DateTime($date);
+        $date = date_format($dateTime, "Y-m-d");
+    }
+
+    if ($returnDate) {
+        $dateTime = new \DateTime($returnDate);
+        $returnDate = date_format($dateTime, "Y-m-d");
+    }
+
+    if ($dueDate) {
+        $dateTime = new \DateTime($dueDate);
+        $dueDate = date_format($dateTime, "Y-m-d");
+    }
+
+    $stmt->execute([
+        $userID,
+        $name,
+        $address,
+        $landlinePhoneNumber,
+        $mobilePhoneNumber,
+        $email,
+        $numberOfEmployees,
+        $date,
+        $returnDate,
+        $dueDate,
+        $observations,
+        $appointmentID
+    ]);
+    return $appointmentID;
+}
+
 function saveAppointmentFile(\PDO $db, $appointmentID, $name, $path)
 {
     $stmt = $db->prepare("INSERT INTO appointment_files VALUES(?, ?, ?, ?, ?)");

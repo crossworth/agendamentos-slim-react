@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Typography, Spin, Alert, List } from 'antd'
 import { getAppointment } from '../api'
+import { Link } from 'react-router-dom'
 
 const { Title } = Typography
 
@@ -126,7 +127,9 @@ export default class Appointment extends React.Component {
       </div>
     } else {
       content = <div>
-        <Title level={3}>Agendamento - {this.state.appointment.name}</Title>
+        <Title level={3}>Agendamento - {this.state.appointment.name} -
+          <small><Link to={`${process.env.PUBLIC_URL}/agendamentos/editar/${this.state.appointment.id}`}>EDITAR</Link></small>
+        </Title>
         <List
           size="small"
           header={<div>Dados do agendamento</div>}
