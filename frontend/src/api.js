@@ -37,7 +37,6 @@ const createAppointment = appointment => {
     number_of_employees: appointment.number_of_employees,
     date: appointment.date,
     return_date: appointment.return_date,
-    due_date: appointment.due_date,
     observations: appointment.observations,
     documents: appointment.documents,
   })
@@ -51,12 +50,11 @@ const getAppointments = () => {
   return api.get('/appointments')
 }
 
-const searchAppointments = (date, returnDate, issueDate) => {
+const searchAppointments = (date, returnDate) => {
   return api.get('/appointments', {
     params: {
       date: date ? date.format() : null,
       return_date: returnDate ? returnDate.format() : null,
-      issue_date: issueDate ? issueDate.format() : null,
     }
   })
 }
@@ -71,7 +69,6 @@ const updateAppointment = appointment => {
     number_of_employees: appointment.number_of_employees,
     date: appointment.date,
     return_date: appointment.return_date,
-    due_date: appointment.due_date,
     observations: appointment.observations
   })
 }

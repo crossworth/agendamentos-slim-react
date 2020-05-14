@@ -69,7 +69,6 @@ class UpdateAppointment extends React.Component {
           number_of_employees: result.data.number_of_employees,
           date: getDate(result.data.date),
           return_date: getDate(result.data.return_date),
-          due_date: getDate(result.data.due_date),
           observations: result.data.observations,
         }
       })
@@ -94,7 +93,6 @@ class UpdateAppointment extends React.Component {
       number_of_employees: values.number_of_employees,
       date: values.date ? values.date.format() : null,
       return_date: values.return_date ? values.return_date.format() : null,
-      due_date: values.due_date ? values.due_date.format() : null,
       observations: values.observations
     }).then(result => {
       message.success('Agendamento atualizado com sucesso')
@@ -170,12 +168,6 @@ class UpdateAppointment extends React.Component {
         <Form.Item
           label="Data de retorno"
           name="return_date">
-          <DatePicker format="DD/MM/YYYY"/>
-        </Form.Item>
-
-        <Form.Item
-          label="Data de vigência"
-          name="due_date">
           <DatePicker format="DD/MM/YYYY"/>
         </Form.Item>
 

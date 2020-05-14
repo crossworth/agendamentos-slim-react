@@ -27,7 +27,7 @@ export default class Search extends React.Component {
       loading: true,
     })
 
-    searchAppointments(values.date, values.return_date, values.issue_date)
+    searchAppointments(values.date, values.return_date)
       .then(result => {
         this.setState({
           loading: false,
@@ -56,11 +56,6 @@ export default class Search extends React.Component {
         title: 'Data de retorno',
         dataIndex: 'return_date',
         key: 'return_date',
-      },
-      {
-        title: 'Data de vigência',
-        dataIndex: 'issue_date',
-        key: 'issue_date',
       }
     ]
 
@@ -70,7 +65,6 @@ export default class Search extends React.Component {
       const data = this.state.results.map(result => {
         result.date = result.date ? (new Date(result.date)).toLocaleDateString() : ''
         result.return_date = result.return_date ? (new Date(result.return_date)).toLocaleDateString() : ''
-        result.issue_date = result.issue_date ? (new Date(result.issue_date)).toLocaleDateString() : ''
         return result
       })
 
@@ -95,12 +89,6 @@ export default class Search extends React.Component {
         <Form.Item
           label="Data de retorno"
           name="return_date">
-          <DatePicker format="DD/MM/YYYY"/>
-        </Form.Item>
-
-        <Form.Item
-          label="Data de vigência"
-          name="due_date">
           <DatePicker format="DD/MM/YYYY"/>
         </Form.Item>
 

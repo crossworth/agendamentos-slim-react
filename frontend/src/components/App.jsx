@@ -7,6 +7,7 @@ import ptBR from 'antd/es/locale/pt_BR'
 import CalendarOutlined from '@ant-design/icons/CalendarOutlined'
 import PlusCircleOutlined from '@ant-design/icons/PlusCircleOutlined'
 import FieldTimeOutlined from '@ant-design/icons/FieldTimeOutlined'
+import LeftCircleOutlined from '@ant-design/icons/LeftCircleOutlined'
 
 import MyAppointments from './MyAppointments'
 import CreateAppointment from './CreateAppointment'
@@ -64,6 +65,12 @@ class App extends React.Component {
                   <span>Pesquisar</span>
                 </Link>
               </Menu.Item>
+              <Menu.Item key={`${process.env.PUBLIC_URL}/voltar`}>
+                <a href="http://link-to-main-portal.com" rel="noopener noreferrer">
+                  <LeftCircleOutlined/>
+                  <span>Voltar</span>
+                </a>
+              </Menu.Item>
             </Menu>
           </Sider>
 
@@ -76,7 +83,8 @@ class App extends React.Component {
             }}>
 
             <Switch>
-              <Route path={`${process.env.PUBLIC_URL}/agendamentos/editar/:id`} render={(props) => <UpdateAppointment {...props}/>}/>
+              <Route path={`${process.env.PUBLIC_URL}/agendamentos/editar/:id`}
+                     render={(props) => <UpdateAppointment {...props}/>}/>
               <Route path={`${process.env.PUBLIC_URL}/agendamentos/:id`} render={(props) => <Appointment {...props}/>}/>
               <Route path={`${process.env.PUBLIC_URL}/agendamentos`}>
                 <MyAppointments/>

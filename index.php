@@ -142,9 +142,8 @@ $app->group('/api', function (App $app) {
         $userID = getUserID();
         $date = isset($_GET['date']) ? $_GET['date'] : null;
         $returnDate = isset($_GET['return_date']) ? $_GET['return_date'] : null;
-        $dueDate = isset($_GET['due_date']) ? $_GET['due_date'] : null;
 
-        $appointments = getAppointments($this->db, $userID, $date, $returnDate, $dueDate);
+        $appointments = getAppointments($this->db, $userID, $date, $returnDate);
         return $response->withJson($appointments);
     });
 
@@ -179,7 +178,6 @@ $app->group('/api', function (App $app) {
         $numberOfEmployees = !empty($contents['number_of_employees']) ? $contents['number_of_employees'] : null;
         $date = !empty($contents['date']) ? $contents['date'] : null;
         $returnDate = !empty($contents['return_date']) ? $contents['return_date'] : null;
-        $dueDate = !empty($contents['due_date']) ? $contents['due_date'] : null;
         $observations = !empty($contents['observations']) ? $contents['observations'] : null;
         $documents = !empty($contents['documents']) ? $contents['documents'] : [];
 
@@ -221,7 +219,6 @@ $app->group('/api', function (App $app) {
             $numberOfEmployees,
             $date,
             $returnDate,
-            $dueDate,
             $observations
         );
 
@@ -270,7 +267,6 @@ $app->group('/api', function (App $app) {
         $numberOfEmployees = !empty($contents['number_of_employees']) ? $contents['number_of_employees'] : null;
         $date = !empty($contents['date']) ? $contents['date'] : null;
         $returnDate = !empty($contents['return_date']) ? $contents['return_date'] : null;
-        $dueDate = !empty($contents['due_date']) ? $contents['due_date'] : null;
         $observations = !empty($contents['observations']) ? $contents['observations'] : null;
 
         if (!$name) {
@@ -303,7 +299,6 @@ $app->group('/api', function (App $app) {
 
         $id = updateAppointment($this->db,
             $appointmentID,
-            $userID,
             $name,
             $address,
             $landlinePhoneNumber,
@@ -312,7 +307,6 @@ $app->group('/api', function (App $app) {
             $numberOfEmployees,
             $date,
             $returnDate,
-            $dueDate,
             $observations
         );
 

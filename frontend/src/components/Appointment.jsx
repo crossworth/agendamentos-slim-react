@@ -60,10 +60,6 @@ const transformData = data => {
       value: formatDate(data.return_date),
     },
     {
-      title: 'Data de vigência',
-      value: formatDate(data.due_date),
-    },
-    {
       title: 'Observações',
       value: data.observations ? data.observations : 'Sem observações',
     },

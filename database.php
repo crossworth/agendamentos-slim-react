@@ -19,10 +19,9 @@ function saveAppointment(\PDO $db,
                          $numberOfEmployees,
                          $date,
                          $returnDate,
-                         $dueDate,
                          $observations)
 {
-    $stmt = $db->prepare("INSERT INTO appointments VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $db->prepare("INSERT INTO appointments VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if ($date) {
         $dateTime = new \DateTime($date);
@@ -32,11 +31,6 @@ function saveAppointment(\PDO $db,
     if ($returnDate) {
         $dateTime = new \DateTime($returnDate);
         $returnDate = date_format($dateTime, "Y-m-d");
-    }
-
-    if ($dueDate) {
-        $dateTime = new \DateTime($dueDate);
-        $dueDate = date_format($dateTime, "Y-m-d");
     }
 
     $stmt->execute([
@@ -50,7 +44,6 @@ function saveAppointment(\PDO $db,
         $numberOfEmployees,
         $date,
         $returnDate,
-        $dueDate,
         $observations
     ]);
     return $db->lastInsertId();
@@ -58,7 +51,6 @@ function saveAppointment(\PDO $db,
 
 function updateAppointment(\PDO $db,
                            $appointmentID,
-                           $userID,
                            $name,
                            $address,
                            $landlinePhoneNumber,
@@ -67,10 +59,9 @@ function updateAppointment(\PDO $db,
                            $numberOfEmployees,
                            $date,
                            $returnDate,
-                           $dueDate,
                            $observations)
 {
-    $stmt = $db->prepare("UPDATE appointments SET alianca_user_id = ?, name = ?, address = ?, landline_phone_number = ?, mobile_phone_number = ?, email = ?, number_of_employees = ?, date = ?, return_date = ?, due_date = ?, observations = ? WHERE id = ?");
+    $stmt = $db->prepare("UPDATE appointments SET name = ?, address = ?, landline_phone_number = ?, mobile_phone_number = ?, email = ?, number_of_employees = ?, date = ?, return_date = ?, observations = ? WHERE id = ?");
 
     if ($date) {
         $dateTime = new \DateTime($date);
@@ -82,13 +73,7 @@ function updateAppointment(\PDO $db,
         $returnDate = date_format($dateTime, "Y-m-d");
     }
 
-    if ($dueDate) {
-        $dateTime = new \DateTime($dueDate);
-        $dueDate = date_format($dateTime, "Y-m-d");
-    }
-
     $stmt->execute([
-        $userID,
         $name,
         $address,
         $landlinePhoneNumber,
@@ -97,7 +82,6 @@ function updateAppointment(\PDO $db,
         $numberOfEmployees,
         $date,
         $returnDate,
-        $dueDate,
         $observations,
         $appointmentID
     ]);
@@ -130,7 +114,7 @@ function getAppointment(\PDO $db, $id)
     return $result;
 }
 
-function getAppointments(\PDO $db, $userID, $date, $returnDate, $dueDate)
+function getAppointments(\PDO $db, $userID, $date, $returnDate)
 {
     $conditions = [];
     $parameters = [];
@@ -143,11 +127,6 @@ function getAppointments(\PDO $db, $userID, $date, $returnDate, $dueDate)
     if ($returnDate) {
         $dateTime = new \DateTime($returnDate);
         $returnDate = date_format($dateTime, "Y-m-d");
-    }
-
-    if ($dueDate) {
-        $dateTime = new \DateTime($dueDate);
-        $dueDate = date_format($dateTime, "Y-m-d");
     }
 
     if ($userID) {
@@ -163,11 +142,6 @@ function getAppointments(\PDO $db, $userID, $date, $returnDate, $dueDate)
     if ($returnDate) {
         $conditions[] = 'return_date = ?';
         $parameters[] = $returnDate;
-    }
-
-    if ($dueDate) {
-        $conditions[] = 'due_date = ?';
-        $parameters[] = $dueDate;
     }
 
     $query = "SELECT * FROM appointments";
@@ -223,7 +197,6 @@ function setupDatabase(\PDO $db)
         number_of_employees varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
         date datetime DEFAULT NULL,
         return_date datetime DEFAULT NULL,
-        due_date datetime DEFAULT NULL,
         observations text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
         PRIMARY KEY (id)
     )");
