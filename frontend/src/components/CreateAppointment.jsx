@@ -144,8 +144,8 @@ class CreateAppointment extends React.Component {
         name="basic"
         layout="vertical"
         initialValues={{
-          ddd_landline_phone_number: 41,
-          ddd_mobile_phone_number: 41,
+          ddd_landline_phone_number: 44,
+          ddd_mobile_phone_number: 44,
         }}
         onFinish={this.onSubmit}>
 

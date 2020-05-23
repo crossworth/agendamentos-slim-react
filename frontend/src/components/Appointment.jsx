@@ -32,6 +32,10 @@ const transformData = data => {
       value: data.name,
     },
     {
+      title: 'Usuário',
+      value: data.user,
+    },
+    {
       title: 'Endereço',
       value: data.address ? data.address : 'Não informado',
     },
@@ -124,7 +128,8 @@ export default class Appointment extends React.Component {
     } else {
       content = <div>
         <Title level={3}>Agendamento - {this.state.appointment.name} -
-          <small><Link to={`${process.env.PUBLIC_URL}/agendamentos/editar/${this.state.appointment.id}`}>EDITAR</Link></small>
+          <small><Link
+            to={`${process.env.PUBLIC_URL}/agendamentos/editar/${this.state.appointment.id}`}>EDITAR</Link></small>
         </Title>
         <List
           size="small"

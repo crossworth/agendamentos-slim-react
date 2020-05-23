@@ -15,7 +15,7 @@ const layout = {
 
 const dddFromNumber = number => {
   if (!number || number.length < 2) {
-    return 41
+    return 44
   }
 
   return number.replace(/\D/g, '').substr(0, 2)

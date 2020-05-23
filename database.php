@@ -9,6 +9,21 @@ function getUserID()
     return isset($_SESSION['codigoIdentificacao']) ? $_SESSION['codigoIdentificacao'] : null;
 }
 
+function getUserName($id = null)
+{
+    if ($id === null) {
+        $id = getUserID();
+    }
+
+    if ($id === null) {
+        return 'Não informado';
+    }
+
+    $json = file_get_contents('http://get-user-name-api.com' . $id);
+    $jsonDecoded = json_decode($json, true);
+    return $jsonDecoded['username'];
+}
+
 function saveAppointment(\PDO $db,
                          $userID,
                          $name,
@@ -109,6 +124,7 @@ function getAppointment(\PDO $db, $id)
 
     if ($result) {
         $result['files'] = getAppointmentFilesForAppointment($db, $id);
+        $result['user'] = getUserName($result['alianca_user_id']);
     }
 
     return $result;
@@ -156,6 +172,7 @@ function getAppointments(\PDO $db, $userID, $date, $returnDate)
 
     foreach ($results as &$result) {
         $result['files'] = getAppointmentFilesForAppointment($db, $result['id']);
+        $result['user'] = getUserName($result['alianca_user_id']);
     }
     unset($result);
 
