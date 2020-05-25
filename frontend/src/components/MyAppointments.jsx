@@ -30,6 +30,9 @@ export default class MyAppointments extends React.Component {
 
           if (!appointmentsByDate[key]) {
             appointmentsByDate[key] = {}
+          }
+
+          if (!appointmentsByDate[key]['date']) {
             appointmentsByDate[key]['date'] = []
           }
 
@@ -42,6 +45,9 @@ export default class MyAppointments extends React.Component {
 
           if (!appointmentsByDate[key]) {
             appointmentsByDate[key] = {}
+          }
+
+          if (!appointmentsByDate[key]['return']) {
             appointmentsByDate[key]['return'] = []
           }
 

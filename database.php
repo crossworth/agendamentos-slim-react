@@ -4,24 +4,30 @@ if (session_id() == '') {
     session_start();
 }
 
+function viewAll()
+{
+    $allowed = [
+        4, // Rodrigo
+        13, // Pedro Henrique
+        21, // Venda interna
+        24, // Celso
+    ];
+
+    if (in_array(getUserID(), $allowed)) {
+        return true;
+    }
+
+    return false;
+}
+
 function getUserID()
 {
     return isset($_SESSION['codigoIdentificacao']) ? $_SESSION['codigoIdentificacao'] : null;
 }
 
-function getUserName($id = null)
+function getUserName()
 {
-    if ($id === null) {
-        $id = getUserID();
-    }
-
-    if ($id === null) {
-        return 'Não informado';
-    }
-
-    $json = file_get_contents('http://get-user-name-api.com' . $id);
-    $jsonDecoded = json_decode($json, true);
-    return $jsonDecoded['username'];
+    return isset($_SESSION['nomeUsuario']) ? $_SESSION['nomeUsuario'] : 'Não informado';
 }
 
 function saveAppointment(\PDO $db,
@@ -36,7 +42,7 @@ function saveAppointment(\PDO $db,
                          $returnDate,
                          $observations)
 {
-    $stmt = $db->prepare("INSERT INTO appointments VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $db->prepare("INSERT INTO appointments VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     if ($date) {
         $dateTime = new \DateTime($date);
@@ -48,9 +54,12 @@ function saveAppointment(\PDO $db,
         $returnDate = date_format($dateTime, "Y-m-d");
     }
 
+    $user = getUserName();
+
     $stmt->execute([
         null,
         $userID,
+        $user,
         $name,
         $address,
         $landlinePhoneNumber,
@@ -124,7 +133,6 @@ function getAppointment(\PDO $db, $id)
 
     if ($result) {
         $result['files'] = getAppointmentFilesForAppointment($db, $id);
-        $result['user'] = getUserName($result['alianca_user_id']);
     }
 
     return $result;
@@ -145,7 +153,7 @@ function getAppointments(\PDO $db, $userID, $date, $returnDate)
         $returnDate = date_format($dateTime, "Y-m-d");
     }
 
-    if ($userID) {
+    if ($userID && !viewAll()) {
         $conditions[] = 'alianca_user_id = ?';
         $parameters[] = $userID;
     }
@@ -172,7 +180,6 @@ function getAppointments(\PDO $db, $userID, $date, $returnDate)
 
     foreach ($results as &$result) {
         $result['files'] = getAppointmentFilesForAppointment($db, $result['id']);
-        $result['user'] = getUserName($result['alianca_user_id']);
     }
     unset($result);
 
@@ -206,6 +213,7 @@ function setupDatabase(\PDO $db)
     CREATE TABLE IF NOT EXISTS appointments (
         id int(10) unsigned NOT NULL AUTO_INCREMENT,
         alianca_user_id int(10) unsigned DEFAULT NULL,
+        user varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, 
         name varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
         address varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
         landline_phone_number varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
