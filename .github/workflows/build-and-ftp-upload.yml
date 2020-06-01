@@ -15,6 +15,7 @@ jobs:
         run: |
           echo "$ENVPHP" > env.php
           git add .
+          git commit -m "prod files"
 
 #      - name: Use Node.js 12.x
 #        uses: actions/setup-node@v1
