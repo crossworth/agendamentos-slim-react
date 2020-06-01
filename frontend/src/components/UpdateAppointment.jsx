@@ -2,7 +2,7 @@ import React from 'react'
 
 import { withRouter } from 'react-router-dom'
 import moment from 'moment'
-import { Typography, Form, Input, Button, Select, InputNumber, DatePicker, message, Alert, Spin } from 'antd'
+import { Typography, Form, Input, Button, InputNumber, DatePicker, message, Alert, Spin } from 'antd'
 import { getAppointment, updateAppointment } from '../api'
 import { dddSelector, phoneValidator, sanitizePhoneNumber } from './CreateAppointment'
 
