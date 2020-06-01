@@ -30,11 +30,9 @@ jobs:
           npm install
           PUBLIC_URL="$PUBLIC_URL" npm run build --if-present
 
-      - name: Upload ftp
-        uses: isthatcentered/dist-to-ftp@master
+      - name: FTP-Deploy-Action
+        uses: SamKirkland/FTP-Deploy-Action@3.1.1
         with:
-          user: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          host: ${{ secrets.FTP_SERVER }}
-          path: .
-          into: agenda
+          ftp-server: ${{ secrets.FTP_SERVER }}
+          ftp-username: ${{ secrets.FTP_USER }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
