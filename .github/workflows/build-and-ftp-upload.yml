@@ -31,10 +31,11 @@ jobs:
           PUBLIC_URL="$PUBLIC_URL" npm run build --if-present
 
       - name: Upload ftp
-        uses: kevinpainchaud/simple-ftp-deploy-action@v1
+        uses: swznd/ftp-deploy@master
         with:
-          ftp_host: ${{ secrets.FTP_SERVER }}
-          ftp_username: ${{ secrets.FTP_USER }}
-          ftp_password: ${{ secrets.FTP_PASSWORD }}
-          local_source_dir: .
-          dist_target_dir: "agenda"
+          host: ${{ secrets.FTP_SERVER }}
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          ignore: .github/**
+          localPath: "."
+          remotePath: "agenda"
