@@ -6,12 +6,8 @@ if (session_id() == '') {
 
 function viewAll()
 {
-    $allowed = [
-        4, // Rodrigo
-        13, // Pedro Henrique
-        21, // Venda interna
-        24, // Celso
-    ];
+    $allowed = [];
+    $allowed = array_merge($allowed, ALLOWED_IDS);
 
     if (in_array(getUserID(), $allowed)) {
         return true;

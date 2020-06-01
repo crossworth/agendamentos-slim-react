@@ -14,6 +14,7 @@ import CreateAppointment from './CreateAppointment'
 import Appointment from './Appointment'
 import Search from './Search'
 import UpdateAppointment from './UpdateAppointment'
+import { mainPortalURL } from '../env'
 
 const { Sider, Content } = Layout
 
@@ -66,7 +67,7 @@ class App extends React.Component {
                 </Link>
               </Menu.Item>
               <Menu.Item key={`${process.env.PUBLIC_URL}/voltar`}>
-                <a href="http://link-to-main-portal.com" rel="noopener noreferrer">
+                <a href={mainPortalURL} rel="noopener noreferrer">
                   <LeftCircleOutlined/>
                   <span>Voltar</span>
                 </a>

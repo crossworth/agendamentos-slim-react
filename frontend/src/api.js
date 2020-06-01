@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { message } from 'antd'
+import { baseURL } from './env'
 
 const api = axios.create({
-  baseURL: 'http://agenda-slim.test/api',
+  baseURL: baseURL,
 })
 
 api.interceptors.response.use((response) => {

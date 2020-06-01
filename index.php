@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/vendor/autoload.php';
+require_once dirname(__FILE__) . '/env.php';
 require_once dirname(__FILE__) . '/database.php';
 
 use Slim\App;
@@ -13,16 +14,16 @@ $config = [
     'displayErrorDetails' => true,
     'addContentLengthHeader' => false,
     'db' => [
-        'host' => 'localhost',
-        'user' => 'root',
-        'pass' => 'root',
-        'dbname' => 'agenda-slim',
+        'host' => DB_HOST,
+        'user' => DB_USER,
+        'pass' => DB_PASSWORD,
+        'dbname' => DB_DATABASE,
     ]
 ];
 
 function getBaseURL()
 {
-    return 'http://agenda-slim.test';
+    return BASE_URL;
 }
 
 $app = new App([
