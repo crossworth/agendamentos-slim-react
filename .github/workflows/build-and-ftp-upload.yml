@@ -14,6 +14,7 @@ jobs:
           ENVPHP: ${{ secrets.ENVPHP }}
         run: |
           echo "$ENVPHP" > env.php
+          git add .
 
 #      - name: Use Node.js 12.x
 #        uses: actions/setup-node@v1
