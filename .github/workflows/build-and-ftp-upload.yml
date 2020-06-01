@@ -27,10 +27,12 @@ jobs:
           node-version: '12.x'
 
       - name: Build Project
+        env:
+          PUBLIC_URL: ${{ secrets.PUBLIC_URL }}
         run: |
           cd frontend
           npm install
-          npm run build --if-present
+          PUBLIC_URL="$PUBLIC_URL" npm run build --if-present
 
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@3.1.1
