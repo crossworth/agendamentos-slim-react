@@ -16,10 +16,6 @@ jobs:
         run: |
           echo "$ENVPHP" > env.php
           echo "$ENVJS" > frontend/src/env.js
-          git config --global user.email "notused@example.com"
-          git config --global user.name "NotUsed"
-          git add .
-          git commit -m "prod files"
 
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
@@ -40,4 +36,4 @@ jobs:
           host: ${{ secrets.FTP_SERVER }}
           user: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          remoteDir: "agenda"
+          remoteDir: "/agenda"
