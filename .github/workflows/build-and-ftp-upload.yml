@@ -31,11 +31,10 @@ jobs:
           PUBLIC_URL="$PUBLIC_URL" npm run build --if-present
 
       - name: Upload ftp
-        uses: swznd/ftp-deploy@master
+        uses: isthatcentered/dist-to-ftp@master
         with:
-          host: ${{ secrets.FTP_SERVER }}
           user: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          ignore: .github/**
-          localPath: "."
-          remotePath: "agenda"
+          host: ${{ secrets.FTP_SERVER }}
+          path: .
+          into: agenda
