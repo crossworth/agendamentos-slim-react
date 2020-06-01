@@ -14,20 +14,22 @@ jobs:
           ENVPHP: ${{ secrets.ENVPHP }}
         run: |
           echo "$ENVPHP" > env.php
+          git config --global user.email "notused@example.com"
+          git config --global user.name "NotUsed"
           git add .
           git commit -m "prod files"
 
-#      - name: Use Node.js 12.x
-#        uses: actions/setup-node@v1
-#        with:
-#          node-version: '12.x'
-#
-#      - name: Build Project
-#        run: |
-#          cd frontend
-#          npm install
-#          npm run build --if-present
-#
+      #      - name: Use Node.js 12.x
+      #        uses: actions/setup-node@v1
+      #        with:
+      #          node-version: '12.x'
+      #
+      #      - name: Build Project
+      #        run: |
+      #          cd frontend
+      #          npm install
+      #          npm run build --if-present
+      #
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@3.1.1
         with:
