@@ -40,3 +40,11 @@ jobs:
           ftp-server: ${{ secrets.FTP_SERVER }}
           ftp-username: ${{ secrets.FTP_USER }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
+
+      - name: Upload ftp
+          uses: sebastianpopp/ftp-action@releases/v2
+          with:
+            host: ${{ secrets.FTP_SERVER }}
+            user: ${{ secrets.FTP_USER }}
+            password: ${{ secrets.FTP_PASSWORD }}
+            remoteDir: "agenda"
