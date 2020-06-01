@@ -2,3 +2,6 @@
 vendor/
 .DS_Store
 api/download/
+production.env.js
+production.env.php
+frontend/node_modules

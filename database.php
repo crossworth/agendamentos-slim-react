@@ -7,7 +7,7 @@ if (session_id() == '') {
 function viewAll()
 {
     $allowed = [];
-    $allowed = array_merge($allowed, ALLOWED_IDS);
+    $allowed = array_merge($allowed, unserialize(ALLOWED_IDS));
 
     if (in_array(getUserID(), $allowed)) {
         return true;
