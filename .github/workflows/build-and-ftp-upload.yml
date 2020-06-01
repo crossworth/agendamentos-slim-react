@@ -31,9 +31,10 @@ jobs:
           PUBLIC_URL="$PUBLIC_URL" npm run build --if-present
 
       - name: Upload ftp
-        uses: sebastianpopp/ftp-action@releases/v2
+        uses: kevinpainchaud/simple-ftp-deploy-action@v1
         with:
-          host: ${{ secrets.FTP_SERVER }}
-          user: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          remoteDir: "/agenda"
+          ftp_host: ${{ secrets.FTP_SERVER }}
+          ftp_username: ${{ secrets.FTP_USER }}
+          ftp_password: ${{ secrets.FTP_PASSWORD }}
+          local_source_dir: .
+          dist_target_dir: "agenda"
