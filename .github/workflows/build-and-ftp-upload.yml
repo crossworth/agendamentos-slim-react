@@ -10,7 +10,7 @@ jobs:
           fetch-depth: 2
 
       - name: Change to production values
-          run: ls
+        run: ls
 
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
