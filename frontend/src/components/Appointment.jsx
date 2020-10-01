@@ -60,7 +60,7 @@ const transformData = data => {
       value: formatDate(data.date),
     },
     {
-      title: 'Data de retorno',
+      title: 'Data do retorno',
       value: formatDate(data.return_date),
     },
     {
