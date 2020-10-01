@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 import { Typography, Spin, Alert, List } from 'antd'
 import { getAppointment } from '../api'
@@ -70,38 +70,25 @@ const transformData = data => {
   ]
 }
 
-export default class Appointment extends React.Component {
-
-  constructor(props, context, state) {
-    super(props, context)
-    this.id = this.props.match.params.id
-
-    this.state = {
-      loading: true,
-      error: false,
-      message: '',
-      appointment: {
-        files: [],
-      },
-    }
-  }
-
-  componentDidMount() {
+export default (props) => {
+    
+  const [files, setFiles] = useState([]);
+  
+  useEffect(() => {
     getAppointment(this.id).then(result => {
-      this.setState({
+      setFiles({
         loading: false,
         appointment: result.data,
       })
     }).catch(error => {
-      this.setState({
+      setFiles({
         loading: false,
         error: true,
         message: error.response.data.message,
       })
     })
-  }
+  }, []);
 
-  render() {
     let content
     let filesContent
 
@@ -148,12 +135,12 @@ export default class Appointment extends React.Component {
         <strong>Arquivos</strong><br/>
         {filesContent}
       </div>
-    }
 
-    return <div>
+    return( <div>
       <Spin tip="Carregando..." spinning={this.state.loading}>
         {content}
       </Spin>
     </div>
+      )
   }
 }
